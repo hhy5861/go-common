@@ -41,7 +41,7 @@ func NewGrpcClientService(cfg *GrpcConfig) *GrpcClientService {
 	}
 }
 
-func (svc *GrpcClientService) GrpcDial() {
+func (svc *GrpcClientService) Dial() {
 	for key, value := range svc.cfg.Cfg {
 		num := svc.tools.GenerateRangeNum(0, len(value))
 		conn, err := grpc.Dial(value[num], grpc.WithInsecure())
