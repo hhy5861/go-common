@@ -265,6 +265,10 @@ func (t *Tools) GetNowMillisecond() int64 {
 	return time.Now().UnixNano() / int64(time.Millisecond)
 }
 
+func (t *Tools) GetAddMillisecond(add time.Duration) int64 {
+	return time.Now().Add(add).UnixNano() / int64(time.Millisecond)
+}
+
 func (t *Tools) GetAcceptLanguage(acceptLanguage string) string {
 	language := "zh-CN"
 

@@ -3,6 +3,7 @@ package jwt
 import (
 	"github.com/dgrijalva/jwt-go"
 	"github.com/hhy5861/go-common/common"
+	"time"
 )
 
 type (
@@ -14,8 +15,6 @@ type (
 	StandardClaims struct {
 		Id      uint   `json:"id"`
 		Uuid    string `json:"userUuid"`
-		UnionId string `json:"unionId"`
-		OpenId  string `json:"openId"`
 		jwt.StandardClaims
 	}
 
@@ -41,9 +40,9 @@ func NewJwtPackage(config *JwtConfig) *JwtPackage {
 
 func (pkg *JwtPackage) CreateToken(standardClaims *StandardClaims) (string, error) {
 	standardClaims.Issuer = standardClaims.Uuid
-	standardClaims.Subject = standardClaims.UnionId
-	standardClaims.IssuedAt = tools.GetNowMillisecond()
-	standardClaims.ExpiresAt = tools.GetNowMillisecond() + (pkg.expired * 1000)
+	standardClaims.Subject = standardClaims.Uuid
+	standardClaims.IssuedAt = jwt.TimeFunc().Unix()
+	standardClaims.ExpiresAt = jwt.TimeFunc().Add(time.Duration(pkg.expired) * time.Second).Unix()
 
 	return jwt.NewWithClaims(jwt.SigningMethodHS256, standardClaims).SignedString(pkg.key)
 }
